@@ -7,9 +7,8 @@ function Navigation({ handlePageChange, page }) {
 		<div className='navigation'>
 			<AppBar position='static'>
 				<Tabs className='navigation-tabs' value={page} onChange={handlePageChange}>
-					<Tab className='navigation-links' label='Summary' />
-					<Tab className='navigation-links' label='Expenses' />
-					<Tab className='navigation-links' label='Tracker' />
+					<Tab className='navigation-links' label='Recipe' /> {/* TODO: make home page */}
+					<Tab className='navigation-links' label='Search' />
 				</Tabs>
 			</AppBar>
 		</div>

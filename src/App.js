@@ -1,43 +1,39 @@
 import React, { useEffect, useState } from 'react';
 
-import ExpensesListByCategory from './components/ExpensesListByCategory';
 import Navigation from './components/navigation';
 import PageWrapper from './components/navigation/PageWrapper';
-import SummaryTotalsTable from './components/SummaryTotalsTable';
-import Tracker from './components/Tracker';
 
-import useExpenses from './state/useExpenses';
-import useItems from './state/useItems';
+import RecipePage from './RecipePage';
+import SearchPage from './SearchPage';
 
 import './styles/App.css';
+import useRecipes from './state/useRecipes';
+import useAuth from './state/useAuth';
 
 function App() {
-  const { getTotalsByCategoryAndMonth } = useExpenses();
-  const { getOwedItems } = useItems();
-  const [page, setPage] = useState(2);
+  const { authenticatedUser, getAuthenticatedUser } = useAuth();
+  const { getRecipes } = useRecipes();
+  const [page, setPage] = useState(0);
 
 	const handlePageChange = (e, newPage) => {
 		setPage(newPage);
 	};
 
   useEffect(() => {
-    // console.log('useEffect App')
-    getOwedItems();
-    getTotalsByCategoryAndMonth();
+    if (authenticatedUser.email) {
+      getRecipes();
+    }
   // eslint-disable-next-line
-  }, []); // react-hooks/exhaustive-deps
+  }, [authenticatedUser]); // react-hooks/exhaustive-deps
 
   return (
     <div className="App">
       <Navigation handlePageChange={handlePageChange} page={page} />
       <PageWrapper value={page} index={0}>
-        <SummaryTotalsTable />
+        <RecipePage />
       </PageWrapper>
       <PageWrapper value={page} index={1}>
-        <ExpensesListByCategory />
-      </PageWrapper>
-      <PageWrapper value={page} index={2}>
-        <Tracker />
+        <SearchPage />
       </PageWrapper>
     </div>
   );

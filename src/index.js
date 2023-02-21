@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
-import { BudgetProvider } from './state/BudgetContext';
+import { CookbookProvider } from './state/CookbookContext';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BudgetProvider>
+    <CookbookProvider>
     <App />
-    </BudgetProvider>
+    </CookbookProvider>
   </React.StrictMode>
 );
 

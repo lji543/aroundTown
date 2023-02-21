@@ -63,7 +63,7 @@ owedToColumns.splice(2, 0, { // owed To Eric, from someone else
   flex: 2,
 });
 
-const Tracker = () => {
+const IngredientList = () => {
   const { addNewOwedItem, owedItems } = useItems();
   // console.log('owed Items ', owedItems)
   const [isAddingOwedToEricItem, setIsAddingOwedToEricItem] = useState(false);
@@ -189,4 +189,4 @@ const Tracker = () => {
   );
 }
 
-export default Tracker;
+export default IngredientList;

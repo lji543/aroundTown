@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics"; // TODO: initialize
+import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { GoogleAuthProvider, getAuth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,16 +10,19 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD5moaa9_HKvczFSN1OrJS1GbirUrdhZxA",
-  authDomain: "drip-f74f5.firebaseapp.com",
-  projectId: "drip-f74f5",
-  storageBucket: "drip-f74f5.appspot.com",
-  messagingSenderId: "887975250701",
-  appId: "1:887975250701:web:51f27157fd52c2eda6fe44",
-  measurementId: "G-ZNF1L5FHZY"
+  apiKey: "AIzaSyC7WS4w1E58DwbeYJVIY5a0A-LHpjO-AVI",
+  authDomain: "my-cookbook-d19b5.firebaseapp.com",
+  projectId: "my-cookbook-d19b5",
+  storageBucket: "my-cookbook-d19b5.appspot.com",
+  messagingSenderId: "362224399771",
+  appId: "1:362224399771:web:d96eacc4ce5ac66fbd9d3e",
+  measurementId: "G-RC0FF8Z98Z"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);  // TODO: initialize
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+
 export const db = getFirestore(app);
