@@ -20,9 +20,9 @@ import {
   TextField,
 } from '@mui/material';
 
-import { capitalizeFirstLetter } from '../utils/utilFunctions';
+import { capitalizeFirstLetter } from '../../utils/utilFunctions';
 
-const IngredientList = ({
+const EditableList = ({
   listArray,
   subHeader,
   dividers,
@@ -118,7 +118,7 @@ const IngredientList = ({
   );
 }
 
-export default IngredientList;
+export default EditableList;
 
 // {Array.isArray(listItem) ? (
 //   <ListItemText>

@@ -7,12 +7,17 @@ import RecipePage from './RecipePage';
 import SearchPage from './SearchPage';
 
 import './styles/App.css';
-import useRecipes from './state/useRecipes';
 import useAuth from './state/useAuth';
+import useRecipes from './state/useRecipes';
+import useUserCookbookData from './state/useUserCookbookData';
+
+import { baseRecipes } from './utils/constants';
 
 function App() {
   const { authenticatedUser, getAuthenticatedUser } = useAuth();
-  const { getRecipes } = useRecipes();
+  const { checkedLogin } = authenticatedUser;
+  const { getUserCookbookData, updateCurrentRecipe } = useUserCookbookData();
+  const { getRecipes, recipes } = useRecipes();
   const [page, setPage] = useState(0);
 
 	const handlePageChange = (e, newPage) => {
@@ -20,8 +25,19 @@ function App() {
 	};
 
   useEffect(() => {
-    if (authenticatedUser.email) {
+    // console.log('App - checking for user ',authenticatedUser)
+    getAuthenticatedUser();
+    // if (authenticatedUser.checkedLogin) {
+    //   setIsLoading(false);
+    // }
+    // eslint-disable-next-line
+  // }, [checkedLogin]); // react-hooks/exhaustive-deps
+  }, [checkedLogin]); // react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (authenticatedUser.email) { // TODO: setup login
       getRecipes();
+      getUserCookbookData();
     }
   // eslint-disable-next-line
   }, [authenticatedUser]); // react-hooks/exhaustive-deps

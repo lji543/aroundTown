@@ -22,20 +22,28 @@ const useAuth = () => {
   const getAuthenticatedUser = () => {
     if (!authenticatedUser.refreshToken) {
       onAuthStateChanged(auth, (user) => {
-        console.log('user ',authenticatedUser)
+        // console.log('user ',authenticatedUser)
         if (user) {
-          // console.log('getAuthenticatedUser ',user)
+          console.log('getAuthenticatedUser ',user)
           // console.log('getAuthenticatedUser -logged in')
           setAuthenticatedUser({
-            email: user.email,
-            uid: user.uid,
+            // email: user.email,
+            // uid: user.uid,
+            email: 'dlake901@gmail.com',
+            uid: 'IkBG546lOVdqA5e3sh0GuMUyLjw1',
             checkedLogin: true, // using for loading state (TODO: use router instead?)
             // refreshToken: user.sTsTokenManager?.refreshToken,
           });
+          // console.log('user ',authenticatedUser)
         } else {
           // User is signed out, will go to login page
           // console.log('getAuthenticatedUser - not signed in')
-          setAuthenticatedUser({
+          // setAuthenticatedUser({
+          //   checkedLogin: true,
+          // });
+          setAuthenticatedUser({ // TODO: temp until login page is setup
+            email: 'dlake901@gmail.com',
+            uid: 'IkBG546lOVdqA5e3sh0GuMUyLjw1',
             checkedLogin: true,
           });
         }

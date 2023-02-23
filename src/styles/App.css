@@ -89,6 +89,11 @@
   color: #02035e !important;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 .divider {
   padding: 8px 0px;
 }
@@ -127,7 +132,24 @@
 }
 .list-item-indicator-steps {
   align-self: flex-start;
-  padding-right: 8px;
+  padding-right: 12px;
+}
+
+.page-title {
+  color: #02035e;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.pageSection-divider {
+  /* margin-bottom: 12px;
+  margin-top: 12px; */
+  padding-bottom: 16px;
+  padding-top: 16px;
+}
+
+.tagSection {
+  text-align: left;
 }
 
 /* .text-color {
