@@ -34,102 +34,81 @@ const RecipePage = () => {
   const { currentRecipeId, getUserCookbookData } = useUserCookbookData();
 
   const [currentRecipe, setCurrentRecipe] = useState();
-  const [directionsListArray, setDirectionsListArray] = useState([]);
-  const [ingredientsListArray, setIngredientsListArray] = useState([]);
-  const [notesListArray, setNotesListArray] = useState([]);
+  const [directionsList, setDirectionsList] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState([]);
+  const [notesList, setNotesList] = useState([]);
   const [isEditingIngredients, setIsEditingIngredients] = useState(false);
   const [isEditingDirections, setIsEditingDirections] = useState(false);
   const [isEditingNotes, setIsEditingNotes] = useState(false);
 
-  const organizeListArrays = () => {
-    const { directions, ingredients, notes } = currentRecipe
-    let directionsArray = [];
-    let ingredientsArray = [];
-    console.log('organizeListArrays ingredients ',ingredients);
-    if (Array.isArray(ingredients)) {
-      ingredients.forEach((ingredient) => ingredientsArray.push(ingredient));
-      directions.forEach((direction) => directionsArray.push(direction));
-      // console.log('organizeListArrays 1  directions ',directionsArray);
-    } else {
-      Object.keys(ingredients).map((sectionOfRecipe, i) => {
-        console.log(sectionOfRecipe)
-        ingredientsArray.push(ingredients[sectionOfRecipe][i]);
-        // assuming sections (keys) will be the same for ingredients and directions
-        // directionsArray.push(directions[i+1])
-        directionsArray.push(directions[sectionOfRecipe][i])
-        // console.log('organizeListArrays 2  directions ',directionsArray);
-        return ingredientsArray, directionsArray;
-      });
-    }
-    console.log('organizeListArrays ingredientsArray ',ingredientsArray);
-    setDirectionsListArray(directionsArray);
-    setIngredientsListArray(ingredientsArray);
-    setNotesListArray(notes)
-  }
-
   const handleListItemChange = (value, i, type) => {
-    // console.log('listItem ',value, i, type);
-    
-    let newListArray = [];
+    console.log('listItem ',value, i, type);
+    let newList = [];
     let changeArrayFn;
-
+    
     switch (type) {
       case 'ingredients':
-        newListArray = [...ingredientsListArray];
-        changeArrayFn = setIngredientsListArray;
+        console.log('ingredientsList ',ingredientsList)
+        newList = Array.isArray(ingredientsList) ? [...ingredientsList] : ingredientsList;
+        changeArrayFn = setIngredientsList;
         break;
       case 'directions':
-        newListArray = [...directionsListArray];
-        changeArrayFn = setDirectionsListArray;
+        console.log('directionsList ',directionsList)
+        // newList = [...directionsList]; // directions are an obj
+        newList = [...directionsList];
+        changeArrayFn = setDirectionsList;
         break;
       case 'notes':
-        newListArray = [...notesListArray];
-        changeArrayFn = setNotesListArray;
+        console.log('notesList ',notesList)
+        newList = [...notesList];
+        changeArrayFn = setNotesList;
         break;                  
     
       default:
         break;
     }
-    // console.log('handleListItemChange: newListArray ',newListArray)
-    if (i >= newListArray.length) {
-      newListArray.push(`New ${type}...`); // Add empty item
+    // console.log('handleListItemChange: newList ',newList)
+    if (i >= newList.length) {
+      newList.push(`New ${type}...`); // Add empty item to array
       // console.log('adding: value ',value)
-      // console.log('adding: newListArray ',newListArray)
+      // console.log('adding: newList ',newList)
+    } else if (i >= Object.keys(newList).length) {
+
     } else if (!value) {
-      // console.log('deleting: newListArray ',newListArray)
-      newListArray.splice(i,i+1); // delete the item if empty textField
+      // console.log('deleting: newList ',newList)
+      newList.splice(i,i+1); // delete the item if empty textField
       // console.log('deleting: value ',value)
-      // console.log('deleting: newListArray ',newListArray)
+      // console.log('deleting: newList ',newList)
     } else {
-      newListArray[i] = value;
+      newList[i] = value;
       // console.log('editing: value ',value)
-      // console.log('editing: newListArray ',newListArray)
+      // console.log('editing: newList ',newList)
     }
-    // console.log('newListArray length',newListArray.length)
-    // console.log('newListArray ',newListArray)
-    changeArrayFn(newListArray);
+    // console.log('newList length',newList.length)
+    // console.log('newList ',newList)
+    changeArrayFn(newList);
   }
 
   const handleListItemUpdate = (type) => {
     // console.log('listItem ',type);
-    let newListArray = [];
+    let newList = [];
 
     switch (type) {
       case 'ingredients':
-        newListArray = [...ingredientsListArray];
+        newList = [...ingredientsList];
         break;
       case 'directions':
-        newListArray = [...directionsListArray];
+        newList = [...directionsList];
         break;
       case 'notes':
-        newListArray = [...notesListArray];
+        newList = [...notesList];
         break;                  
     
       default:
         break;
     }
-    // console.log('handleListItemUpdate newListArray ',newListArray);
-    updateRecipeListInfo(newListArray, type);
+    // console.log('handleListItemUpdate newList ',newList);
+    updateRecipeListInfo(newList, type);
   }
 
   useEffect(() => {
@@ -149,13 +128,16 @@ const RecipePage = () => {
   useEffect(() => {
     // console.log('RecipePage useEffect 3')
     if (currentRecipe) {
-      organizeListArrays();
+      const { directions, ingredients, notes } = currentRecipe;
+      setDirectionsList(directions);
+      setIngredientsList(ingredients);
+      setNotesList(notes)
     }
   // eslint-disable-next-line
   }, [currentRecipe]); // react-hooks/exhaustive-deps
 
   if (currentRecipe) {
-    const { directions, id, ingredients, name, notes, photos, tags, url } = currentRecipe
+    const { directions, id, ingredients, name, notes, photos, tags, url } = currentRecipe;
     return (
       <div className=''>
         <Container maxWidth='xs' className='image-container'>
@@ -169,23 +151,25 @@ const RecipePage = () => {
         <div className='pageSection-divider'><a target='_recipeNewTab' href={url} className='page-title'>{name}</a></div>
         <div className='pageSection-divider'>
           {/* <EditModeSwitch buttonText={'Edit Ingredients'} isAddingItem={isEditingIngredients} setIsAddingItem={setIsEditingIngredients} type={'ingredients'} /> */}
-          <EditableList
+          <IngredientList
             handleListItemChange={handleListItemChange}
             handleListItemUpdate={handleListItemUpdate}
             isAddingItem={isEditingIngredients}
-            listArray={ingredientsListArray}
+            // listArray={ingredientsList}
+            list={ingredients}
             setIsAddingItem={setIsEditingIngredients}
             type={'ingredients'}
           />
         </div>
         <div className='pageSection-divider'>
           {/* <div className='list-header'>Directions:</div> */}
-            <EditableList
+            <IngredientList
               dividers
               handleListItemChange={handleListItemChange}
               handleListItemUpdate={handleListItemUpdate}
               isAddingItem={isEditingDirections}
-              listArray={directionsListArray}
+              // listArray={directionsList}
+              list={directions}
               setIsAddingItem={setIsEditingDirections}
               stepNumbers
               type={'directions'}
@@ -194,14 +178,14 @@ const RecipePage = () => {
         {notes.length > 0 &&
           <div className='pageSection-divider'>
             {/* <div className='list-header'>Other Notes:</div> */}
-            <EditableList
+            {/* <EditableList
               handleListItemChange={handleListItemChange}
               handleListItemUpdate={handleListItemUpdate}
               isAddingItem={isEditingNotes}
-              listArray={notesListArray}
+              list={notes}
               setIsAddingItem={setIsEditingNotes}
               type={'notes'}
-            />
+            /> */}
           </div>
         }
         {/* {photos.all.length > 0 && */}

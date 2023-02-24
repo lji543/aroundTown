@@ -24,6 +24,7 @@ import { capitalizeFirstLetter } from '../../utils/utilFunctions';
 
 const EditableList = ({
   listArray,
+  list,
   subHeader,
   dividers,
   stepNumbers,
@@ -33,7 +34,7 @@ const EditableList = ({
   isAddingItem,
   setIsAddingItem,
 }) => {
-  // console.log('listArray ',listArray)
+  // console.log('listArray ',list)
 
   const handleChange = (target, i) => {
     // console.log('listItem ',listItem, i)
@@ -90,40 +91,91 @@ const EditableList = ({
           </div>
         }
       </div>
-      {/* {subHeader && <div className='list-subHeader'>{`${capitalizeFirstLetter(subHeader)}:`}</div>} */}
-      {listArray.map((listItem, i) => 
-        <div key={i}>
-          <ListItem disablePadding>
-            <div className='list-item-indicator'>
-              {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-            </div>
-            {isAddingItem ? (
-              <TextField
-                size="small"
-                fullWidth
-                variant="standard"
-                multiline
-                id={`${i}`}
-                value={listItem}
-                onChange={(e) => handleChange(e.target, i)}
-              />
-              ) : (
-              <ListItemText primary={listItem} />
-            )}
-          </ListItem>
-          {(dividers && (i + 1) !== listArray.length) && <Divider className='divider' />}
+      {Array.isArray(list) ? (
+        <div>
+          {list.map((listItem, i) => {
+            if (isAddingItem) {
+              console.log('listItem ', listItem)
+              return (
+                <div key={i}>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    id={`${i}`}
+                    value={listItem}
+                    onChange={(e) => handleChange(e.target, i)}
+                  />
+                  <TextField
+                    size="small"
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    id={`${i}`}
+                    value={listItem}
+                    onChange={(e) => handleChange(e.target, i)}
+                  />
+                  <TextField
+                    size="small"
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    id={`${i}`}
+                    value={listItem}
+                    onChange={(e) => handleChange(e.target, i)}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <ListItem key={i} className='row'>
+                  <div className='list-item-indicator'>
+                    {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
+                  </div>
+                  <ListItemText primary={listItem}/>
+                </ListItem>
+              );
+            }
+          })}
         </div>
+      ) : (
+        Object.keys(list).map((section) => {
+          console.log('section ',section)
+          return (
+            <div key={section}>
+              <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
+              {Object.values(list[section]).map((item, i) => {
+                if (isAddingItem) {
+                  return (
+                    <TextField
+                      key={i}
+                      size="small"
+                      fullWidth
+                      variant="standard"
+                      multiline
+                      id={`${i}`}
+                      value={item}
+                      onChange={(e) => handleChange(e.target, i)}
+                    />
+                  );
+                } else {
+                  return (
+                    <ListItem key={i} className='row'>
+                      <div className='list-item-indicator'>
+                        {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
+                      </div>
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  );
+                }
+              })}
+            </div>
+          );
+        })
       )}
     </MUIList>
   );
 }
 
 export default EditableList;
-
-// {Array.isArray(listItem) ? (
-//   <ListItemText>
-//     {listItem.map((item) => item)}
-//   </ListItemText>
-// ) : (
-//   <ListItemText primary={listItem} />
-// )}

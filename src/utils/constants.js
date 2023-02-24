@@ -497,11 +497,11 @@ export const baseRecipes = {
     //   'cooked sushi rice, without vinegar': ['cooked sushi rice, without vinegar', '6', 'cups'],
     // },
     ingredients: [
-      {ing: 'spam', amnt: '12', meansurement: 'oz'},
-      {ing: 'oyster sauce', amnt: '1/4', meansurement: 'cup'},
-      {ing: 'soy sauce', amnt: '1/4', meansurement: 'cup'},
-      {ing: 'sugar', amnt: '1/2', meansurement: 'cup'},
-      {ing: 'cooked sushi rice, without vinegar', amnt: '6', meansurement: 'cups'},
+      {ing: 'spam', amt: '12', measurement: 'oz'},
+      {ing: 'oyster sauce', amt: '1/4', measurement: 'cup'},
+      {ing: 'soy sauce', amt: '1/4', measurement: 'cup'},
+      {ing: 'sugar', amt: '1/2', measurement: 'cup'},
+      {ing: 'cooked sushi rice, without vinegar', amt: '6', measurement: 'cups'},
     ],
     // directions: {
     //   1: 'Slice the SPAM into about 8-10 slices (depending on how thick you like it) and put in a Ziplock bag. Mix oyster sauce, soy sauce, and sugar until sugar is dissolved and add to the bag with the SPAM. Marinate for about 15 minutes.',

@@ -23,7 +23,7 @@ import {
 import { capitalizeFirstLetter } from '../utils/utilFunctions';
 
 const IngredientList = ({
-  // listArray,
+  listArray,
   list,
   subHeader,
   dividers,
@@ -59,10 +59,10 @@ const IngredientList = ({
 
   const handleAddItem = () => {
     // console.log('handleAddItem ',isAddingItem)
-    handleChange('', list.length, type)
+    handleChange('', listArray.length, type)
   }
 
-  return ( // TODO: consolidate some of the elements (create a standard fn that returns the dom element) so that we're not repeating the same dom elements based on isAdding or is an object, array, etc
+  return (
     <MUIList>
       <div className='row'>
         <div className='list-header'>{`${capitalizeFirstLetter(type)}:`}</div>
@@ -95,7 +95,7 @@ const IngredientList = ({
       {Array.isArray(list) ? (
         <div>
           {list.map((ingredient, i) => {
-            // console.log('IngredientList - do we use this? ', ingredient)
+            // console.log('ingredient ', ingredient)
             if (isAddingItem) {
               return (
                 <div key={i}>
@@ -142,54 +142,29 @@ const IngredientList = ({
         </div>
       ) : (
         <div>
-          {Object.keys(list).map((section, i) => {
-            if (typeof list[section] === 'string') {
-              // console.log('listSection string ', list[section]);
-              return (
-                <div key={list[section]}>
-                  {isAddingItem ? (
-                    <TextField
-                      size="small"
-                      fullWidth
-                      variant="standard"
-                      multiline
-                      id={`${i}`}
-                      value={list[section]}
-                      onChange={(e) => handleChange(e.target, i)}
-                    />
-                  ) : (
-                    <ListItem className='row' key={list[section]}>
-                      <div className='list-item-indicator'>
-                        {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-                      </div>
-                      <ListItemText primary={list[section]} />
-                    </ListItem>
-                  )}
-              </div>
-              );
-            } else if (Array.isArray(list[section])) {
-              // console.log('section', section);
+          {Object.keys(list).map((section) => {
+            console.log('listSection ', list[section]);
+            const element = () => {
               return (
                 <div key={section}>
                   <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
                   {list[section].map((item, i) => {
-                    // console.log('item', item);
                     if (isAddingItem) {
                       return (
                         <TextField
-                          key={type === 'ingredients' ? item.ing : item}
+                          key={item}
                           size="small"
                           fullWidth
                           variant="standard"
                           multiline
                           id={`${i}`}
-                          value={type === 'ingredients' ? item.ing : item}
+                          value={item}
                           onChange={(e) => handleChange(e.target, i)}
                         />
                       );
                     } else {
                       return (
-                        <ListItem className='row' key={item.ing}>
+                        <ListItem className='row' key={item}>
                           <div className='list-item-indicator'>
                             {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
                           </div>
@@ -200,13 +175,17 @@ const IngredientList = ({
                   })}
                 </div>
               );
+            }
+
+            if (typeof list[section] === 'string') {
+              return (
+                element()
+              );
             } else {
-              // console.log('listSection obj', list[section]);
               return (
                 <div key={section}>
                   <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
-                  {Object.values(list[section]).map((item, i) => {
-                    // console.log('item', item);
+                  {list[section].map((item, i) => {
                     if (isAddingItem) {
                       return (
                         <TextField
