@@ -17,11 +17,29 @@ const useUserCookbookData = () => {
   const [status, setStatus] = statusCookbookContext;
   const [userCookbookData, setUserCookbookData] = userCookbookDataCookbookContext;
   
-  const updateCurrentRecipe = (recipe) => {
+  async function setCurrentRecipe(recipeId) {
+    const updatedUserData = { 
+      ...userCookbookData,
+      currentRecipeId: recipeId,
+    }
+    try {
+      const userDocRef = doc(db, authenticatedUser.uid, "userCookbookData");
+      console.log('doc update with: ',updatedUserData);
+      await updateDoc(userDocRef, updatedUserData);
+      setUserCookbookData(updatedUserData);
+      // setStatus({ uType, result: 'success' });
+    } catch (err) {
+      // setStatus({ uType, result: 'error'});
+      console.log(err);
+    }
+  }
+
+  const updateCurrentRecipe = (recipeId) => {
     const newUserDataState = {
       ...userCookbookData,
-      currentRecipe: recipe,
+      currentRecipeId: recipeId,
     }
+    
     // console.log('recipe ',recipe)
     updateUserCookbookData(newUserDataState);
   }
@@ -51,8 +69,9 @@ const useUserCookbookData = () => {
         setUserCookbookData(state => (
           { 
             ...state,
+            userCategories: userData.userCategories || [],
             userTags: userData.userTags || [],
-            currentRecipe: userData.currentRecipe,
+            // currentRecipe: userData.currentRecipe,
             currentRecipeId: userData.currentRecipeId,
           }
         ));
@@ -63,9 +82,10 @@ const useUserCookbookData = () => {
 
   return {
     getUserCookbookData,
+    setCurrentRecipe,
     updateCurrentRecipe,
     updateUserCookbookData,
-    currentRecipe: userCookbookData.currentRecipe,
+    // currentRecipe: userCookbookData.currentRecipe,
     currentRecipeId: userCookbookData.currentRecipeId,
     userTags: userCookbookData.userTags,
   }

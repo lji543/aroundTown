@@ -29,13 +29,16 @@ const IngredientList = ({
   dividers,
   stepNumbers,
   handleListItemChange,
-  handleListItemUpdate,
+  handleListUpdate,
   type,
   isAddingItem,
+  sections,
   setIsAddingItem,
 }) => {
   // console.log('listArray ',listArray)
   // console.log('list ',list)
+
+  const [listArray, setListArray] = useState(list);
 
   const handleChange = (target, i) => {
     // console.log('listItem ',listItem, i)
@@ -44,25 +47,57 @@ const IngredientList = ({
   }
 
   // const handleUpdate = () => {
-  //   handleListItemUpdate(type);
+  //   handleListUpdate(type);
   // }
 
   const handleOnClick = () => {
     console.log('handleOnClick ',isAddingItem)
     if (isAddingItem) {
       // handleUpdate();
-      handleListItemUpdate(type);
+      handleListUpdate(type);
     }
     
     setIsAddingItem(!isAddingItem);
   }
 
-  const handleAddItem = () => {
+  const handleAddItem = (section) => {
     // console.log('handleAddItem ',isAddingItem)
-    handleChange('', list.length, type)
+    handleListItemChange('', list.length, type, section)
   }
 
-  return ( // TODO: consolidate some of the elements (create a standard fn that returns the dom element) so that we're not repeating the same dom elements based on isAdding or is an object, array, etc
+  const organizeSectionedList = () => {
+    // console.log('handleAddItem ',isAddingItem)
+    let newArray = [];
+    sections.forEach((section, i) => {
+      let stepTracker = 0;
+      newArray.push({sectionTitle: section});
+      list.forEach((listItem, idx) => {
+        if (listItem.section == section) {
+          stepTracker += 1;
+          newArray.push({
+            ...listItem,
+            step: stepTracker,
+          });
+        }
+      })
+    });
+    // console.log('newArray ', newArray)
+    setListArray(newArray);
+  }
+
+  useEffect(() => {
+    // console.log('IngredientsList useEffect ', list)
+    if (list.length > 0) {
+      if (sections) {
+        organizeSectionedList();
+      } else {
+        setListArray(list);
+      }
+    }
+  // eslint-disable-next-line
+  }, [list]); // react-hooks/exhaustive-deps
+
+  return ( // TODO: consolidate some of these elements (create a standard fn that returns the dom element) so that we're not repeating the same dom elements based on isAdding or is an object, array, etc
     <MUIList>
       <div className='row'>
         <div className='list-header'>{`${capitalizeFirstLetter(type)}:`}</div>
@@ -75,13 +110,26 @@ const IngredientList = ({
         </Button>
         {isAddingItem && 
           <div>
-            <Button
+            {sections ? (
+              sections.map((section) => 
+                <Button
+                  key={section}
+                  className='button top-margin-12'
+                  startIcon={<AddIcon />}
+                  onClick={() => handleAddItem(section)}
+                >
+                  {`Add ${section} ${type === 'direction' ? 'step' : type}`}
+                </Button>
+              )
+            ) : (
+              <Button
               className='button top-margin-12'
-              startIcon={<CancelIcon />}
+              startIcon={<AddIcon />}
               onClick={() => handleAddItem()}
-            >
-              Add Item
-            </Button>
+              >
+                {`Add ${type === 'direction' ? 'step' : type}`}
+              </Button>
+            )}
             <Button
               className='button top-margin-12'
               startIcon={<CancelIcon />}
@@ -92,190 +140,101 @@ const IngredientList = ({
           </div>
         }
       </div>
-      {Array.isArray(list) ? (
-        <div>
-          {list.map((ingredient, i) => {
-            // console.log('IngredientList - do we use this? ', ingredient)
-            if (isAddingItem) {
-              return (
-                <div key={i}>
+      <div>
+        {listArray.map((listItem, i) => {
+          return (
+            <div key={`${listItem[type]}${i}`}>
+              {listItem.sectionTitle && <div className='list-subHeader'>{`${capitalizeFirstLetter(listItem.sectionTitle)}:`}</div>}
+              {!listItem.sectionTitle && <ListItem className='row'>
+                <div className='list-item-indicator'>
+                  {stepNumbers ? <div className='list-item-indicator-steps'>{listItem.step}</div> : <RemoveIcon />}
+                </div>
+                {isAddingItem ? (
                   <TextField
                     size="small"
                     fullWidth
                     variant="standard"
                     multiline
                     id={`${i}`}
-                    value={ingredient.ing}
+                    value={listItem[type]}
                     onChange={(e) => handleChange(e.target, i)}
                   />
-                  <TextField
-                    size="small"
-                    fullWidth
-                    variant="standard"
-                    multiline
-                    id={`${i}`}
-                    value={ingredient.amt}
-                    onChange={(e) => handleChange(e.target, i)}
-                  />
-                  <TextField
-                    size="small"
-                    fullWidth
-                    variant="standard"
-                    multiline
-                    id={`${i}`}
-                    value={ingredient.measurement}
-                    onChange={(e) => handleChange(e.target, i)}
-                  />
-                </div>
-              );
-            } else {
-              return (
-                <ListItem className='row' key={ingredient.ing}>
-                  <div className='list-item-indicator'>
-                    {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-                  </div>
-                  <ListItemText primary={type === 'ingredients' ? `${ingredient.ing}: ${ingredient.amt} ${ingredient.measurement}` : ingredient}/>
-                </ListItem>
-              );
-            }
-          })}
-        </div>
-      ) : (
-        <div>
-          {Object.keys(list).map((section, i) => {
-            if (typeof list[section] === 'string') {
-              // console.log('listSection string ', list[section]);
-              return (
-                <div key={list[section]}>
-                  {isAddingItem ? (
-                    <TextField
-                      size="small"
-                      fullWidth
-                      variant="standard"
-                      multiline
-                      id={`${i}`}
-                      value={list[section]}
-                      onChange={(e) => handleChange(e.target, i)}
-                    />
-                  ) : (
-                    <ListItem className='row' key={list[section]}>
-                      <div className='list-item-indicator'>
-                        {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-                      </div>
-                      <ListItemText primary={list[section]} />
-                    </ListItem>
-                  )}
-              </div>
-              );
-            } else if (Array.isArray(list[section])) {
-              // console.log('section', section);
-              return (
-                <div key={section}>
-                  <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
-                  {list[section].map((item, i) => {
-                    // console.log('item', item);
-                    if (isAddingItem) {
-                      return (
-                        <TextField
-                          key={type === 'ingredients' ? item.ing : item}
-                          size="small"
-                          fullWidth
-                          variant="standard"
-                          multiline
-                          id={`${i}`}
-                          value={type === 'ingredients' ? item.ing : item}
-                          onChange={(e) => handleChange(e.target, i)}
-                        />
-                      );
-                    } else {
-                      return (
-                        <ListItem className='row' key={item.ing}>
-                          <div className='list-item-indicator'>
-                            {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-                          </div>
-                          <ListItemText primary={type === 'ingredients' ? `${item.ing}: ${item.amt} ${item.measurement}` : item} />
-                        </ListItem>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            } else {
-              // console.log('listSection obj', list[section]);
-              return (
-                <div key={section}>
-                  <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
-                  {Object.values(list[section]).map((item, i) => {
-                    // console.log('item', item);
-                    if (isAddingItem) {
-                      return (
-                        <TextField
-                          key={item}
-                          size="small"
-                          fullWidth
-                          variant="standard"
-                          multiline
-                          id={`${i}`}
-                          value={item}
-                          onChange={(e) => handleChange(e.target, i)}
-                        />
-                      );
-                    } else {
-                      return (
-                        <ListItem className='row' key={item}>
-                          <div className='list-item-indicator'>
-                            {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
-                          </div>
-                          <ListItemText primary={type === 'ingredients' ? `${item.ing}: ${item.amt} ${item.measurement}` : item} />
-                        </ListItem>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            }
-          })}
-        </div>
-      )}
+                ) : (
+                  <ListItemText primary={type === 'ingredient' ? `${listItem.ingredient}: ${listItem.amt} ${listItem.measurement}` : listItem[type]} />
+                )}
+              </ListItem>}
+            </div>
+          );
+        })}
+      </div>
     </MUIList>
   );
 }
 
 export default IngredientList;
 
-// {Array.isArray(listItem) ? (
-//   <ListItemText>
-//     {listItem.map((item) => item)}
-//   </ListItemText>
+// {sections ? (
+//   sections.map((section, idx) => {
+//     const sectionNumber = idx;
+//     let trackSection = sectionNumber;
+//     console.log('sectionNumber ', sectionNumber)
+//     // console.log('trackSection ', trackSection) 
+//     return (
+//       <div>
+//         <div className='list-subHeader'>{`${capitalizeFirstLetter(section)}:`}</div>
+//         {list.map((listItem, i) => {
+//           console.log('listItem ', i)
+//           if (listItem.section === section) {
+//             return (                  
+//               <ListItem key={`${listItem[type]}${i}`} className='row'>
+//                 <div className='list-listItem-indicator'>
+//                   {stepNumbers ? <div className='list-listItem-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
+//                 </div>
+//                 {isAddingItem ? (
+//                   <TextField
+//                     size="small"
+//                     fullWidth
+//                     variant="standard"
+//                     multiline
+//                     id={`${i}`}
+//                     value={listItem[type]}
+//                     onChange={(e) => handleChange(e.target, i)}
+//                   />
+//                 ) : (
+//                   <ListItemText primary={type === 'ingredient' ? `${listItem.ingredient}: ${listItem.amt} ${listItem.measurement}` : listItem[type]} />
+//                 )}
+//               </ListItem>
+//             );
+//           }
+//         })}
+//       </div>
+//     );
+//   })
 // ) : (
-//   <ListItemText primary={listItem} />
-// )}
-
-
-// {listArray.map((listItem, i) => 
-//   <div key={i}>
-//     <ListItem disablePadding>
-//       {isAddingItem ? (
-//         <TextField
-//           size="small"
-//           fullWidth
-//           variant="standard"
-//           multiline
-//           id={`${i}`}
-//           value={listItem}
-//           onChange={(e) => handleChange(e.target, i)}
-//         />
-//       ) : (
-//         <div className='row'>
-//           <div className='list-item-indicator'>
-//             {stepNumbers ? <div className='list-item-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
+//   list.map((listItem, i) => {
+//     // console.log('listItem ', listItem)
+//     return (
+//       <div key={`${listItem[type]}${i}`}>
+//         {listItem.section && <div className='list-subHeader'>{`${capitalizeFirstLetter(listItem.section)}:`}</div>}
+//         <ListItem className='row'>
+//           <div className='list-listItem-indicator'>
+//             {stepNumbers ? <div className='list-listItem-indicator-steps'>{i + 1}</div> : <RemoveIcon />}
 //           </div>
-//           <ListItemText>
-//             {`${listItem.ing}: ${listItem.amt} ${listItem.measurement}`}
-//           </ListItemText>
-//         </div>
-//       )}
-//     </ListItem>
-//     {(dividers && (i + 1) !== listArray.length) && <Divider className='divider' />}
-//   </div>
+//           {isAddingItem ? (
+//             <TextField
+//               size="small"
+//               fullWidth
+//               variant="standard"
+//               multiline
+//               id={`${i}`}
+//               value={listItem[type]}
+//               onChange={(e) => handleChange(e.target, i)}
+//             />
+//           ) : (
+//             <ListItemText primary={type === 'ingredient' ? `${listItem.ingredient}: ${listItem.amt} ${listItem.measurement}` : listItem[type]} />
+//           )}
+//         </ListItem>
+//       </div>
+//     );
+//   })
 // )}

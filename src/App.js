@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import Navigation from './components/navigation';
 import PageWrapper from './components/navigation/PageWrapper';
 
+import AddRecipe from './components/AddRecipe';
+import CookbookDashboard from './CookbookDashboard';
 import RecipePage from './RecipePage';
 import SearchPage from './SearchPage';
 
@@ -18,7 +20,7 @@ function App() {
   const { checkedLogin } = authenticatedUser;
   const { getUserCookbookData, updateCurrentRecipe } = useUserCookbookData();
   const { getRecipes, recipes } = useRecipes();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(3);
 
 	const handlePageChange = (e, newPage) => {
 		setPage(newPage);
@@ -46,10 +48,16 @@ function App() {
     <div className="App">
       <Navigation handlePageChange={handlePageChange} page={page} />
       <PageWrapper value={page} index={0}>
-        <RecipePage />
+        <CookbookDashboard setPage={setPage} />
       </PageWrapper>
       <PageWrapper value={page} index={1}>
+        <RecipePage />
+      </PageWrapper>
+      <PageWrapper value={page} index={2}>
         <SearchPage />
+      </PageWrapper>
+      <PageWrapper value={page} index={3}>
+        <AddRecipe />
       </PageWrapper>
     </div>
   );

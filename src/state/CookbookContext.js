@@ -2,7 +2,7 @@
 // or maybe split up useExpenses instead
 import React, { useState } from 'react';
 
-import { baseRecipes, userTags } from '../utils/constants';
+import { baseRecipes, recipeCategories, userTags } from '../utils/constants';
 
 const CookbookContext = React.createContext([{}, () => {}]);
 
@@ -43,7 +43,8 @@ const CookbookProvider = (props) => {
   //   userTags: [],
   // });
   const [userCookbookData, setUserCookbookData] = useState({
-    currentRecipe: {},
+    currentRecipeId: '',
+    userCategories: recipeCategories,
     userTags: userTags,
   });
   return (

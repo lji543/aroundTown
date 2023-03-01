@@ -15,12 +15,6 @@ const useRecipes = () => {
   const { authenticatedUser, getAuthenticatedUser } = useAuth();
   const { currentRecipeId } = useUserCookbookData();
 
-  // const { recipes } = recipesState;
-  // console.log('useRecipes recipes ',recipes)
-  // console.log('useRecipes recipesState ',recipesState)
-
-  // const [currentRecipe, setCurrentRecipe] = useState({});
-
   function addNewRecipe(newItem, owedCategory) {
     // let itemList = [...owedItems[owedCategory]];
     // // console.log('addNewOwedItem ', newItem, owedCategory);
@@ -57,29 +51,37 @@ const useRecipes = () => {
     // console.log('newTagArray ',newTagsForRecipe)
   }
 
-  function updateRecipeListInfo(newListArray, type) {
+  function updateRecipeListInfo(newListArray, type) { // TODO: could combine with updating item info
     // console.log('updateRecipeListInfo ',newListArray, type)
     // console.log('recipes ',recipes)
     // console.log('recipes ',recipes)
     const updatedRecipe = {
       ...recipes[currentRecipeId],
-      [type]: newListArray
+      [`${type}s`]: newListArray
     }
     // console.log('updatedRecipe ',updatedRecipe)
     // console.log('updatedState ',{
-    //   ...recipesState.recipes,
+    //   ...recipes,
     //   [currentRecipeId]: updatedRecipe,
     // })
     setRecipes({
-      // ...recipesState.recipes,
       ...recipes,
       [currentRecipeId]: updatedRecipe,
     });
     updateRecipe(currentRecipeId, updatedRecipe);
   }
 
-  function updateRecipeTags(tags, type) {
-    // console.log('updateRecipeTags ',tags, type)
+  function updateRecipeItemInfo(updatedRecipe) { // TODO: could combine with updating list info
+    // console.log('updateRecipeItemInfo ',value, id)
+    setRecipes({
+      ...recipes,
+      [currentRecipeId]: updatedRecipe,
+    });
+    updateRecipe(currentRecipeId, updatedRecipe);
+  }
+
+  function updateRecipeTags(tags) {
+    // console.log('updateRecipeTags ',tags)
     const updatedRecipe = {
       // ...recipes[currentRecipeId],
       ...recipes[currentRecipeId],
@@ -94,17 +96,33 @@ const useRecipes = () => {
     updateRecipe(currentRecipeId, updatedRecipe);
   }
 
-  const updateRecipe = async (id, newRecipesState, updateType) => {
-    try { // TODO: somehow target just the recipe that was altered, not everything
+  const addRecipe = async (newRecipe) => {
+    try {
       // console.log('doc update with: ',{...newRecipesState});
       const recipesDocRef = doc(db, authenticatedUser.uid, "recipes");
-      // await updateDoc(recipesDocRef, {
-      //   ...newRecipesState,
-      //   // timestamp: serverTimestamp(),
-      // });
+      const newID = `${newRecipe.name}-${Math.round(Math.random()*1000000)}`;
+
+      await updateDoc(recipesDocRef, {
+        ...recipes,
+        [newID]: {
+          ...newRecipe,
+          id: newID, // TODO: do we need the id inside the object?
+        },
+      });
+      // setStatus({ uType, result: 'success' });
+    } catch (err) {
+      // setStatus({ uType, result: 'error'});
+      console.log(err);
+    }
+  }
+
+  const updateRecipe = async (id, newRecipesState, updateType) => {
+    try {
+      // console.log('doc update with: ',{...newRecipesState});
+      const recipesDocRef = doc(db, authenticatedUser.uid, "recipes");
+
       await updateDoc(recipesDocRef, {
         [id]: newRecipesState,
-        timestamp: serverTimestamp(),
       });
       // setStatus({ uType, result: 'success' });
     } catch (err) {
@@ -117,8 +135,8 @@ const useRecipes = () => {
     const recipesDocRef = doc(db, authenticatedUser.uid, "recipes");
 
     await getDoc(recipesDocRef).then((recipes) => {
-      // const recipesData = recipes.data();
-      const recipesData = baseRecipes; // TODO: temp for dev
+      const recipesData = recipes.data();
+      // const recipesData = baseRecipes; // TODO: temp for dev
       // console.log('Firebase recipesData ', recipesData)
       // console.log('Firebase check recipesData ', check)
 
@@ -135,9 +153,11 @@ const useRecipes = () => {
   }
 
   return {
+    addRecipe,
     getRecipes,
     deleteTag,
     updateRecipe,
+    updateRecipeItemInfo,
     updateRecipeListInfo,
     updateRecipeTags,
     recipes: recipes,

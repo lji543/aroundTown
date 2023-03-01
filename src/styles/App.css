@@ -1,18 +1,38 @@
-/* veryDarkBlue: #02035e */
-/* grayBlue: #8bafc1 */
-/* veryLightBlue: #d0e5ff */
-/* blue: #1976d2 */
-/* darkLavendar: #6658ff */
-/* veryDarkLavendar: #3a38bf */
+:root {
+  --darkBlue: #02174c;
+  --veryDarkBlue: #02035e;
+  --grayBlue: #8bafc1;
+  --veryLightBlue: #d0e5ff;
+  --blue: #1976d2;
+  --darkLavendar: #6658ff;
+  --veryDarkLavendar: #3a38bf;
+
+  --bluePurple: #2a2c76;
+  /* --veryLightTeal: #e4f9f5; */
+  --veryLightTeal: #e0f2f1;
+  /* --lightTeal: #baf0e6; */
+  --lightTeal: #b2dfdb;
+  --teal: #81e4c4;
+  --logoTeal: #8bedd8;
+  --lightGray: #cfd8dc;
+  --gray: #90a4ae;
+  --lightGrayBlue: #b2dfdb;
+  --darkGray: #607d8b; /* TODO: too dark (used for hover on tables) */
+  --green: #06c96c;
+
+  --black: #111111;
+  --red: rgba(255, 0, 0, 0.693);
+
+  --appBackground: #e6e6e678;
+  --smallScreenBackground: #112a6eac;
+}
 
 .App {
-  background-color: #e6e6e678;
-  /* background-color: #ffffff; */
+  background-color: var(--appBackground);
   text-align: center;
 }
 .page-wrapper {
   margin: 24px;
-  /* background-color: #e6e6e6; */
 }
 
 
@@ -20,14 +40,13 @@
 /*/ NAVIGATION /*/
 /* //////////// */
 .navigation .MuiPaper-root {
-  /* background-color: #11506e; */
-  background-color: #02174c;
+  background-color: var(--darkBlue);
 }
 .navigation-links.MuiTab-textColorPrimary {
-  color: #06c96c !important;
+  color: var(--green) !important;
 }
 .navigation-tabs .MuiTabs-indicator {
-  background-color: #06c96c !important;
+  background-color: var(--green) !important;
 }
 
 
@@ -40,19 +59,19 @@
   width: 100%;
 }
 .tabs .MuiButtonBase-root {
-  color: #02035e !important;
+  color: var(--veryDarkBlue) !important;
 }
 .tabs .MuiTabs-indicator {
-  background-color: #02035e; 
+  background-color: var(--veryDarkBlue); 
 }
 .tabs .Mui-disabled.MuiTabScrollButton-root {
   display: none; /* Hide disabled tab scroll when all the way left or right */
 }
 .tabs-hover:hover {
-  background-color: #baf0e6;
+  background-color: var(--lightTeal);
 }
 .tabs-hover.Mui-selected:hover {
-  background-color: #e4f9f5;
+  background-color: var(--veryLightTeal);
 }
 
 .tabs-vertical {
@@ -62,13 +81,13 @@
   overflow: visible; /* Show vertical tabs on large screens */
 }
 .tabs-vertical .Mui-selected {
-  background-color: #e4f9f5;
+  background-color: var(--veryLightTeal);
   border-radius: 4px 0px 0px 4px;
   font-weight: 600;
 }
 
 .tabPanel-vertical {
-  background-color: #e4f9f5;
+  background-color: var(--veryLightTeal);
   border-radius: 0px 4px 4px 4px;
   max-width: 85%;
 }
@@ -82,11 +101,11 @@
   /* padding-top: 24px; */
 }
 .button {
-  color: #02035e !important;
+  color: var(--veryDarkBlue) !important;
 }
 .button-outlined {
-  border: solid 1px #02035e !important;
-  color: #02035e !important;
+  border: solid 1px var(--veryDarkBlue) !important;
+  color: var(--veryDarkBlue) !important;
 }
 
 .row {
@@ -112,14 +131,14 @@
 }
 
 .list-header {
-  color: #02035e;
+  color: var(--veryDarkBlue);
   font-size: 24px;
   font-weight: bold;
   padding: 12px 0px;
   text-align: left;
 }
 .list-subHeader {
-  color: #02035e;
+  color: var(--veryDarkBlue);
   font-size: 20px;
   font-weight: 500;
   padding-bottom: 8px;
@@ -136,7 +155,7 @@
 }
 
 .page-title {
-  color: #02035e;
+  color: var(--veryDarkBlue);
   font-size: 32px;
   font-weight: bold;
 }
@@ -148,6 +167,35 @@
   padding-top: 16px;
 }
 
+.stack {
+  margin: 12px 0px;
+  padding: 12px 0px;
+}
+.stack-row {
+  padding: 12px 0px 12px 4px;
+  /* margin-bottom: 16px; */
+}
+.stack-row:hover {
+  background: var(--veryLightTeal); /* // TODO: this isn't working */
+}
+.stack-row-item {
+  color: var(--veryDarkBlue);
+}
+.stack-first-item {
+  /* background-color: var(--appBackground); */
+  font-weight: 600;
+  /* overflow-x: scroll; // TODO: why does this add padding */
+  text-align: left;
+  /* vertical-align: top; */
+  width: 164px;
+}
+.width-84 {
+  width: 84px;
+}
+.width-104 {
+  width: 104px;
+}
+
 .tagSection {
   text-align: left;
 }
@@ -156,23 +204,25 @@
 
 } */
 /* .title-text-color {
-  color: #02035e;
+  color: var(--veryDarkBlue);
 } */
 
 /* .form {
   padding: 56px 8px 0px 8px
 } */
 /* .form-title {
-  color: #02035e;
+  color: var(--veryDarkBlue);
   font-size: 18px;
   font-weight: 600;
   padding-bottom: 24px;
   text-align: left;
 } */
 
-/* .form-row {
+.form-row {
+  /* align-items: space-around; */
   display: flex;
-} */
+  /* justify-content: ; */
+}
 
 /* .form-error {
   color: rgba(255, 0, 0, 0.693);
@@ -265,7 +315,7 @@
 
   /* .small-screen .MuiInputBase-root { */
   .small-screen {
-    background-color: #112a6eac;
+    background-color: var(--smallScreenBackground);
     /* display: visible; */
     font-size: 18px;
     font-weight: 600;

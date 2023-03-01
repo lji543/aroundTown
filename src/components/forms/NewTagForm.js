@@ -8,7 +8,7 @@ import { convertToInt, formatDate } from '../../utils/utilFunctions';
 import useRecipes from './../../state/useRecipes';
 import useUserCookbookData from './../../state/useUserCookbookData';
 
-const NewTagForm = ({ currentRecipe }) => {
+const NewTagForm = ({ currentRecipe, handleTagArrayUpdate }) => {
   const { deleteTag, recipes, updateRecipe, updateRecipeTags } = useRecipes();
   const { updateCurrentRecipe } = useUserCookbookData();
   const { directions, id, ingredients, notes, photos, tags } = currentRecipe;
@@ -71,7 +71,11 @@ const NewTagForm = ({ currentRecipe }) => {
 
   const handleChipDelete = (tag, type) => {
     // console.log('tag ',tag, type)
-    deleteTag(id, tag, type);
+    if (handleTagArrayUpdate) {
+      handleTagArrayUpdate(tag, type);
+    } else {
+      deleteTag(id, tag, type);
+    }
   }
 
   const organizeOptions = () => {
@@ -117,7 +121,11 @@ const NewTagForm = ({ currentRecipe }) => {
 
       setTagOptions(newTagOptions);
       setRecipeTags(newRecipeTags);
-      updateRecipeTags(newRecipeTags, newValue.section);
+      if (handleTagArrayUpdate) {
+        handleTagArrayUpdate(newRecipeTags, newValue.section);
+      } else {
+        updateRecipeTags(newRecipeTags, newValue.section);
+      }
     }
     // setValue('');
     // setValue({});
