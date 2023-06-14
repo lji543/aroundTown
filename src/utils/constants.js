@@ -119,6 +119,7 @@ export const baseRecipes = {
     cookTime: [],
     totalTime: ['10', 'minutes'],
     recipeSections: ['dressing', 'slaw'],
+    isFavorite: true,
     ingredients: [
       {section: 'dressing', ingredient: 'rice vinegar', amt: '1/3', measurement: 'cup'},
       {section: 'dressing', ingredient: 'oil', amt: '2/3', measurement: 'cup'},

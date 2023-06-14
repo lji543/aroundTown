@@ -12,12 +12,12 @@ import {
 import { addDoc, collection, doc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore'
 
 import { auth, db } from '../utils/firebase.config';
-import { CookbookContext } from "./CookbookContext";
+import { AppContext } from "./ContextProvider";
 
 const useAuth = () => {
-  const { authenticatedUserCookbookContext } = useContext(CookbookContext);
+  const { authenticatedUserAppContext } = useContext(AppContext);
   // const owedItemsCollectionRef = collection(db, 'owedItems');
-  const [authenticatedUser, setAuthenticatedUser] = authenticatedUserCookbookContext;
+  const [authenticatedUser, setAuthenticatedUser] = authenticatedUserAppContext;
 
   const getAuthenticatedUser = () => {
     if (!authenticatedUser.refreshToken) {

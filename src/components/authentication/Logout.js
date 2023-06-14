@@ -15,7 +15,7 @@ const Logout = () => {
         <img
           className='image'
           src={tealBlackName}
-          alt={'Drip'}
+          alt={'Discoverhood'}
           loading="lazy"
         />
         <img
