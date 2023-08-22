@@ -26,6 +26,7 @@ import { baseRecipes } from './utils/constants';
 
 // import EditModeSwitch from './components/EditModeSwitch';
 
+
 import { capitalizeFirstLetter } from './utils/utilFunctions';
 
 const Dashboard = ({ setPage }) => {

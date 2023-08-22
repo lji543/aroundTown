@@ -40,7 +40,7 @@ const MapContainer = ({ placeName = 'Test Name' }) => {
   // };
 
   useEffect(() => {
-    console.log('locations ',locations)
+    // console.log('locations ',locations)
     // navigator.geolocation.getCurrentPosition(success);
   }, [locations])
   // console.log('container ',locations[4].location)

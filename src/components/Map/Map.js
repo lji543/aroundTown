@@ -52,13 +52,16 @@ const Map = ({ placeName = 'Test Name' }) => {
       // center={currentPosition}
     >
       {locations.map((item) => (
-        <Marker key={item.id} position={item.location} onClick={() => onSelect(item)}>
+        <Marker
+          key={item.id}
+          position={item.location}
+          onClick={() => onSelect(item)}
+        >
           {/* <InfoWindow
             position={selected.location}
             clickable={true}
             onCloseClick={() => setSelected({})}
           >
-
           </InfoWindow> */}
         </Marker>
       ))}

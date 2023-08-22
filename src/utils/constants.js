@@ -1,5 +1,7 @@
 
-export const googleMapsAPIKey = 'AIzaSyDLb40V4v0CBLKKFaxjZRrev3cg_AZv5rU';
+import { gmKey } from "./privateKeys";
+
+export const googleMapsAPIKey = gmKey;
 
 export const statusMessages = {
   add: {
