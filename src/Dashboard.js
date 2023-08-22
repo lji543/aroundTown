@@ -17,6 +17,11 @@ import {
   Stack,
 } from '@mui/material';
 
+// import Map from './components/Map/_index';
+import MapContainer from './components/Map/MapContainer';
+
+import useMap from './state/useMap';
+
 import { baseRecipes } from './utils/constants';
 
 // import EditModeSwitch from './components/EditModeSwitch';
@@ -24,15 +29,9 @@ import { baseRecipes } from './utils/constants';
 import { capitalizeFirstLetter } from './utils/utilFunctions';
 
 const Dashboard = ({ setPage }) => {
-
-  useEffect(() => {
-
-  // eslint-disable-next-line
-  }, []); // react-hooks/exhaustive-deps
-
   return (
     <div>
-      HOME
+      <MapContainer />
     </div>
   )
 }

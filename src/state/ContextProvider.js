@@ -12,6 +12,10 @@ const AppContextProvider = (props) => {
     uid: null,
     // name: null,
   });
+  const [map, setMap] = useState({
+    lat: 39.742043,
+    lng: -104.991531
+  })
   const [status, setStatus] = useState({
     updateType: null,
     result: null,
@@ -20,6 +24,7 @@ const AppContextProvider = (props) => {
     <AppContext.Provider
       value={{
         authenticatedUserAppContext: [authenticatedUser, setAuthenticatedUser],
+        mapAppContext: [map, setMap],
         statusAppContext: [status, setStatus],
       }}
     >

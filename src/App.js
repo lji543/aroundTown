@@ -13,7 +13,7 @@ import { baseRecipes } from './utils/constants';
 function App() {
   const { authenticatedUser, getAuthenticatedUser } = useAuth();
   const { checkedLogin } = authenticatedUser;
-  const [page, setPage] = useState(3);
+  const [page, setPage] = useState(0);
 
 	const handlePageChange = (e, newPage) => {
 		setPage(newPage);
